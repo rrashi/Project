@@ -21,10 +21,16 @@ WINDOW_H = 720
 
 BUILDING_SCROLL = 150
 
+HORIZONTAL_MOVEMENT = true -- true if girlie is not restricted in horizontal movement because of building
+VERTICAL_MOVEMENT = true -- true if girlie is not restricted in vertical movement (falling) because of building
+
 local girlie = Girlie(0, (WINDOW_H - GIRLIE_IMAGE:getHeight()))
 local buildings = {}
 local next_pos = VIRTUAL_W-- to keep track of the x position of each next building
 local timer = 0
+local scrolling = true
+
+local fall = true;
 
 math.randomseed(os.time()) 
 -- loads screen initially
@@ -79,6 +85,8 @@ function love.draw()
 
 end
 function love.update(dt)
+if scrolling then
+  
   BACKGROUND_X = (BACKGROUND_X + BACKGROUND_SPEED * dt) % BACKGROUND_LOOPING_POINT
   CLOUDS_X = (CLOUDS_X + CLOUDS_SPEED * dt) % 900
   
@@ -89,6 +97,10 @@ function love.update(dt)
     end 
      
   for k, building in ipairs(buildings) do
+    if girlie:collide(building) then
+      girlie.obstructed = true
+    end
+    
     building:update(dt)
     if(building.x < (0- BUILDING_IMAGE:getWidth()))then
       table.remove(buildings, k)
@@ -97,7 +109,8 @@ function love.update(dt)
   
   girlie:update(dt)
   love.keyboard.keysPressed = {} -- flushes table so that only a single key is stored at once
-  
+end
+
 end
 
 function love.resize(w, h)
