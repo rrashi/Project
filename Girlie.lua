@@ -14,6 +14,7 @@ function Girlie:init (x, y)
   self.width = GIRLIE_IMAGE:getWidth()
   self.height = GIRLIE_IMAGE:getHeight()
   self.obstructed = false
+  self.onBuilding = false
 end
 
 -- updates girlie character through call from main
@@ -35,8 +36,12 @@ function Girlie:update(dt)
 -- if girlie is in air, applies graviy 
 -- otherwise resets her position to original ground
   if self.y < (VIRTUAL_H - GIRLIE_IMAGE:getHeight() - 10) then
-      self.dy = self.dy + GRAVITY * dt 
-      self.y = self.y + self.dy
+     if self.onBuilding == false then --checks if girlie is on a building, sets velocity to 0 if she is
+       self.dy = self.dy + GRAVITY * dt 
+       self.y = self.y + self.dy --normal fall condition if not on building
+      else
+        self.dy = 0
+      end
     else
       self.y = VIRTUAL_H - GIRLIE_IMAGE:getHeight()
       self.dy = 0
@@ -49,17 +54,24 @@ end
 
 function Girlie:collide(building)
   if self.x + self.width - 50 > building.x and
-     self.x < building.x + building.width then
-       return true
+     self.x + 50 < building.x + building.width then
+       if self.y + self.height > building.y + 10 then
+        self.onBuilding = false --to reset condition
+        return true
+       else if self.y + self.height < building.y + 10 and --condition to check if girlie is on building
+         self.y + self.height > building.y - 10 then
+         self.onBuilding = true
+         return false
+       else
+        self.onBuilding = false
+        return false
      end
+  end
 end
+end
+
   
 -- renders girlie on screen at x, y
 function Girlie:render()
   love.graphics.draw(GIRLIE_IMAGE, self.x, self.y)
 end
-
-
-
-  
-
