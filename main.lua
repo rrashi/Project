@@ -5,7 +5,7 @@ require 'Building'
 
 BACKGROUND = love.graphics.newImage("buildings.png")
 BACKGROUND_X = 0
-BACKGROUND_SPEED = 200
+BACKGROUND_SPEED = 300
 BACKGROUND_LOOPING_POINT = 890
 
 VIRTUAL_W = 900
@@ -19,7 +19,8 @@ CLOUDS_Y = CLOUDS:getHeight()- 50
 WINDOW_W = 1280
 WINDOW_H = 720
 
-BUILDING_SCROLL = 150
+
+BUILDING_SCROLL = 300
 
 HORIZONTAL_MOVEMENT = true -- true if girlie is not restricted in horizontal movement because of building
 VERTICAL_MOVEMENT = true -- true if girlie is not restricted in vertical movement (falling) because of building
@@ -88,11 +89,10 @@ function love.update(dt)
 if scrolling then
   
   BACKGROUND_X = (BACKGROUND_X + BACKGROUND_SPEED * dt) % BACKGROUND_LOOPING_POINT
-  CLOUDS_X = (CLOUDS_X + CLOUDS_SPEED * dt) % 900
   
   timer = timer + dt
-  if timer > 2 then 
-     table.insert(buildings, Building((VIRTUAL_W+math.random(70, 300)), math.random(VIRTUAL_H/2 + 30, VIRTUAL_H-100)))
+  if timer > 2.5 then 
+     table.insert(buildings, Building((VIRTUAL_W+math.random(50, 100)), math.random(VIRTUAL_H/2 + 50, VIRTUAL_H - 50)))
      timer = 0
     end 
      
