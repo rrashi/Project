@@ -6,7 +6,7 @@ require 'Building'
 BACKGROUND = love.graphics.newImage("buildings.png")
 BACKGROUND_X = 0
 BACKGROUND_SPEED = 300
-BACKGROUND_LOOPING_POINT = 890
+BACKGROUND_LOOPING_POINT = 898
 
 VIRTUAL_W = 900
 VIRTUAL_H = 600
@@ -20,7 +20,7 @@ WINDOW_W = 1280
 WINDOW_H = 720
 
 
-BUILDING_SCROLL = 300
+BUILDING_SCROLL = 250
 
 HORIZONTAL_MOVEMENT = true -- true if girlie is not restricted in horizontal movement because of building
 VERTICAL_MOVEMENT = true -- true if girlie is not restricted in vertical movement (falling) because of building
@@ -30,6 +30,8 @@ local buildings = {}
 local next_pos = VIRTUAL_W-- to keep track of the x position of each next building
 local timer = 0
 local scrolling = true
+local score = 0
+
 
 local fall = true;
 
@@ -48,7 +50,8 @@ push:setupScreen(VIRTUAL_W, VIRTUAL_H, WINDOW_W, WINDOW_H, {
   }) -- external class used to setup screen over window
 
 love.keyboard.keysPressed = {} -- a table to keep track of a key pressed
-    
+
+score = 0
 end
 
 -- function called when a key is pressed
@@ -75,7 +78,6 @@ function love.draw()
   push:start() 
   
   love.graphics.draw(BACKGROUND, -BACKGROUND_X, 0)
-  --love.graphics.draw(CLOUDS, -CLOUDS_X, CLOUDS_Y)
   girlie:render()
   
   for k, building in ipairs(buildings) do
@@ -97,8 +99,17 @@ if scrolling then
     end 
      
   for k, building in ipairs(buildings) do
+    
     if girlie:collide(building) then
       girlie.obstructed = true
+    end
+    
+    if not building.passed then
+     if building.x + building.width < girlie.x then
+       building.passed = true
+       girlie.score = girlie.score + 1
+       print(girlie.score)
+      end
     end
     
     building:update(dt)

@@ -14,6 +14,7 @@ function Girlie:init (x, y)
   self.width = GIRLIE_IMAGE:getWidth()
   self.height = GIRLIE_IMAGE:getHeight()
   self.obstructed = false
+  self.score = 0
 end
 
 -- updates girlie character through call from main
@@ -48,8 +49,6 @@ function Girlie:update(dt)
       self.x = self.x -(BUILDING_SCROLL * dt)
    end
  end
-   
-
 
 
 
