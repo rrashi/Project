@@ -29,8 +29,8 @@ local girlie = Girlie(0, (WINDOW_H - GIRLIE_IMAGE:getHeight()))
 local buildings = {}
 local next_pos = VIRTUAL_W-- to keep track of the x position of each next building
 local timer = 0
-local scrolling = true
 local score = 0
+local scoreFont 
 
 
 local fall = true;
@@ -51,7 +51,7 @@ push:setupScreen(VIRTUAL_W, VIRTUAL_H, WINDOW_W, WINDOW_H, {
 
 love.keyboard.keysPressed = {} -- a table to keep track of a key pressed
 
-score = 0
+scoreFont = love.graphics.newFont('font.ttf', 48)
 end
 
 -- function called when a key is pressed
@@ -83,14 +83,17 @@ function love.draw()
   for k, building in ipairs(buildings) do
     building:render()
   end
+  
+  love.graphics.setFont(scoreFont)
+  
+  love.graphics.print(girlie.score, VIRTUAL_W - 70, 40)
  
  push:finish()
 
 end
 function love.update(dt)
-if scrolling then
-  
-  BACKGROUND_X = (BACKGROUND_X + BACKGROUND_SPEED * dt) % BACKGROUND_LOOPING_POINT
+
+BACKGROUND_X = (BACKGROUND_X + BACKGROUND_SPEED * dt) % BACKGROUND_LOOPING_POINT
   
   timer = timer + dt
   if timer > 2.5 then 
@@ -108,7 +111,6 @@ if scrolling then
      if building.x + building.width < girlie.x then
        building.passed = true
        girlie.score = girlie.score + 1
-       print(girlie.score)
       end
     end
     
@@ -122,7 +124,7 @@ if scrolling then
   love.keyboard.keysPressed = {} -- flushes table so that only a single key is stored at once
 end
 
-end
+
 
 function love.resize(w, h)
   push:resize(w, h)

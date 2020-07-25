@@ -55,7 +55,7 @@ function Girlie:update(dt)
 function Girlie:collide(building)
   if self.x + self.width - 50 > building.x and
      self.x + 50 < building.x + building.width then
-       if self.y + self.height > building.y + 10 then
+       if self.y + self.height > building.y then
         return true
        else 
         return false
