@@ -46,15 +46,15 @@ function Girlie:update(dt)
   end
 
    else
-      self.x = self.x -(BUILDING_SCROLL * dt)
+      self.x = self.x -(CURRENT_BUILDING_SPEED * dt)
    end
  end
 
 
 
 function Girlie:collide(building)
-  if self.x + self.width - 50 > building.x and
-     self.x + 50 < building.x + building.width then
+  if self.x + self.width - 75 > building.x and
+     self.x + 75 < building.x + building.width then
        if self.y + self.height > building.y then
         return true
        else 

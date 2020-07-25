@@ -19,20 +19,21 @@ CLOUDS_Y = CLOUDS:getHeight()- 50
 WINDOW_W = 1280
 WINDOW_H = 720
 
-
-BUILDING_SCROLL = 250
+BUILDING_SCROLL_SPEEDS = {150, 175, 225, 250, 275, 300, 325}
+CURRENT_BUILDING_SPEED = 200
 
 HORIZONTAL_MOVEMENT = true -- true if girlie is not restricted in horizontal movement because of building
 VERTICAL_MOVEMENT = true -- true if girlie is not restricted in vertical movement (falling) because of building
 
+
 local girlie = Girlie(0, (WINDOW_H - GIRLIE_IMAGE:getHeight()))
 local buildings = {}
 local next_pos = VIRTUAL_W-- to keep track of the x position of each next building
-local timer = 0
+local building_spawn_timer = 0
+local building_speed_timer = 0
 local score = 0
 local scoreFont 
-
-
+local gameOver = false
 local fall = true;
 
 math.randomseed(os.time()) 
@@ -77,6 +78,8 @@ end
 function love.draw()
   push:start() 
   
+  love.graphics.setFont(scoreFont)
+    
   love.graphics.draw(BACKGROUND, -BACKGROUND_X, 0)
   girlie:render()
   
@@ -84,27 +87,42 @@ function love.draw()
     building:render()
   end
   
-  love.graphics.setFont(scoreFont)
+  if gameOver == true then
+  love.graphics.print("GAME OVER", VIRTUAL_W/2-125, VIRTUAL_H/2)
+  end
   
   love.graphics.print(girlie.score, VIRTUAL_W - 70, 40)
- 
+  
  push:finish()
 
 end
 function love.update(dt)
+  
+if girlie.x < -girlie.width then
+    gameOver = true
+  end
 
+building_speed_timer = building_speed_timer + dt
+
+if building_speed_timer > 5 then
+  select = math.random(1,7)
+  CURRENT_BUILDING_SPEED = BUILDING_SCROLL_SPEEDS[select]
+  building_speed_timer = 0
+  end
+  
 BACKGROUND_X = (BACKGROUND_X + BACKGROUND_SPEED * dt) % BACKGROUND_LOOPING_POINT
   
-  timer = timer + dt
-  if timer > 2.5 then 
+  building_spawn_timer = building_spawn_timer + dt
+  if building_spawn_timer > 2.5 then 
      table.insert(buildings, Building((VIRTUAL_W+math.random(50, 100)), math.random(VIRTUAL_H/2 + 50, VIRTUAL_H - 50)))
-     timer = 0
+     building_spawn_timer = 0
     end 
      
   for k, building in ipairs(buildings) do
     
     if girlie:collide(building) then
       girlie.obstructed = true
+      gameOver = true
     end
     
     if not building.passed then
@@ -122,6 +140,7 @@ BACKGROUND_X = (BACKGROUND_X + BACKGROUND_SPEED * dt) % BACKGROUND_LOOPING_POINT
   
   girlie:update(dt)
   love.keyboard.keysPressed = {} -- flushes table so that only a single key is stored at once
+    
 end
 
 
@@ -129,6 +148,8 @@ end
 function love.resize(w, h)
   push:resize(w, h)
 end
+
+
 
 
 

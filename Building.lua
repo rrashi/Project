@@ -16,6 +16,6 @@ function Building:render()
 end
 
 function Building:update(dt)
-  self.x = self.x - (BUILDING_SCROLL * dt)
+  self.x = self.x - (CURRENT_BUILDING_SPEED * dt)
   end
   
