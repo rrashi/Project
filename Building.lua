@@ -1,6 +1,8 @@
+--Class which initializes Building instances
+
 Building = Class{}
 
-BUILDING_IMAGE = love.graphics.newImage("single_building.png")
+BUILDING_IMAGE = love.graphics.newImage("Images/single_building.png")
 
 
 function  Building:init(x, y)

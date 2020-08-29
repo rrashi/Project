@@ -1,6 +1,8 @@
+--class to initializes Girlie instance
+
 Girlie = Class{}
 
-GIRLIE_IMAGE = love.graphics.newImage("girlie.png")
+GIRLIE_IMAGE = love.graphics.newImage("Images/girlie.png")
 GRAVITY = 12
 JUMP = 150
 
@@ -37,6 +39,7 @@ function Girlie:update(dt)
 -- if girlie is in air, applies graviy 
 -- otherwise resets her position to original ground
   if self.y < (VIRTUAL_H - GIRLIE_IMAGE:getHeight() - 10) then
+    
   --checks if girlie is on a building, sets velocity to 0 if she is
        self.dy = self.dy + GRAVITY * dt 
        self.y = self.y + self.dy --normal fall condition if not on building
@@ -44,7 +47,8 @@ function Girlie:update(dt)
       self.y = VIRTUAL_H - GIRLIE_IMAGE:getHeight()
       self.dy = 0
   end
-
+  
+--condition for girlie colliding with building and is pushed back
    else
       self.x = self.x -(CURRENT_BUILDING_SPEED * dt)
    end
@@ -53,8 +57,8 @@ function Girlie:update(dt)
 
 
 function Girlie:collide(building)
-  if self.x + self.width - 75 > building.x and
-     self.x + 75 < building.x + building.width then
+  if self.x + self.width - 50 > building.x and
+     self.x + 50 < building.x + building.width then
        if self.y + self.height > building.y then
         return true
        else 

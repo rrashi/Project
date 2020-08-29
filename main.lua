@@ -1,25 +1,33 @@
+--Indie Runner Game
+
+--Based on "Pong" written by Colton Ogden 
+--cogden@cs50.harvard.edu
+--https://github.com/games50/pong
+
+
+--https://github.com/Ulydev/push/blob/master/push.lua
 push = require 'push'
+
+---- https://github.com/vrld/hump/blob/master/class.lua
 Class = require 'class'
 require 'Girlie'
 require 'Building'
 
-BACKGROUND = love.graphics.newImage("buildings.png")
+BACKGROUND = love.graphics.newImage("Images/buildings.png")
 BACKGROUND_X = 0
 BACKGROUND_SPEED = 300
 BACKGROUND_LOOPING_POINT = 898
 
+--virtual width and virtual height
 VIRTUAL_W = 900
 VIRTUAL_H = 600
 
-CLOUDS = love.graphics.newImage("clouds.png")
-CLOUDS_SPEED = 20
-CLOUDS_X = VIRTUAL_W
-CLOUDS_Y = CLOUDS:getHeight()- 50
-
+--window width and window height
 WINDOW_W = 1280
 WINDOW_H = 720
 
-BUILDING_SCROLL_SPEEDS = {150, 175, 225, 250, 275, 300, 325}
+--varying speeds of the buildings which will be randomly assigned at certain time intervals
+BUILDING_SCROLL_SPEEDS = {150, 175, 225, 250, 275, 320, 350}
 CURRENT_BUILDING_SPEED = 200
 
 HORIZONTAL_MOVEMENT = true -- true if girlie is not restricted in horizontal movement because of building
@@ -37,6 +45,7 @@ local gameOver = false
 local fall = true;
 
 math.randomseed(os.time()) 
+
 -- loads screen initially
 function love.load()
   
@@ -104,6 +113,7 @@ if girlie.x < -girlie.width then
 
 building_speed_timer = building_speed_timer + dt
 
+--randomized building speeds after specific interval of time
 if building_speed_timer > 5 then
   select = math.random(1,7)
   CURRENT_BUILDING_SPEED = BUILDING_SCROLL_SPEEDS[select]
@@ -113,6 +123,7 @@ if building_speed_timer > 5 then
 BACKGROUND_X = (BACKGROUND_X + BACKGROUND_SPEED * dt) % BACKGROUND_LOOPING_POINT
   
   building_spawn_timer = building_spawn_timer + dt
+  --spawns building at certain intervals of time
   if building_spawn_timer > 2.5 then 
      table.insert(buildings, Building((VIRTUAL_W+math.random(50, 100)), math.random(VIRTUAL_H/2 + 50, VIRTUAL_H - 50)))
      building_spawn_timer = 0
